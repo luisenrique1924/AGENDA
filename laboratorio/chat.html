@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat - Dentodesk</title>
+  <link rel="stylesheet" href="chat.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">🦷 Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar paciente">
+      <button><i class="fas fa-search"></i></button>
+    </div>
+  </header>
+
+  <!-- Contenedor principal -->
+  <main class="chat-container">
+    <!-- Lista de chats -->
+    <aside class="chat-list">
+      <button id="nuevoChatBtn"><i class="fas fa-plus"></i> Nuevo chat</button>
+      <h3>Chats</h3>
+      <!-- Aquí irán los chats -->
+  <div id="chatItems">
+    <div class="chat-item active">
+      <img src="https://via.placeholder.com/40" alt="perfil">
+      <div class="chat-info">
+        <p class="chat-name">Francelli Meta</p>
+        <p class="chat-msg">¿Ves mi mensaje?</p>
+      </div>
+    </div>
+
+      <div class="chat-item">
+      <img src="https://via.placeholder.com/40" alt="perfil">
+      <div class="chat-info">
+        <p class="chat-name">Margarita Torres</p>
+        <p class="chat-msg">Gracias por confirmar tu cita 😃</p>
+      </div>
+    </div>
+
+      <div class="chat-item">
+      <img src="https://via.placeholder.com/40" alt="perfil">
+      <div class="chat-info">
+        <p class="chat-name">Jaime Whatsapp</p>
+        <p class="chat-msg">Puedes comunicarte con la clínica...</p>
+      </div>
+    </div>
+    </aside>
+
+    <!-- Área de conversación -->
+    <section class="chat-window">
+      <div class="messages">
+        <div class="msg received">
+          <p>Hola</p>
+          <span class="time">9:40 am</span>
+        </div>
+        <div class="msg received">
+          <p>Gracias, llegaré 10 min tarde.</p>
+          <span class="time">9:40 am</span>
+        </div>
+        <div class="msg received">
+          <p>Por favor</p>
+          <span class="time">9:40 am</span>
+        </div>
+
+        <div class="msg sent">
+          <p>"¡Hola! Soy Clínica Dental Dentoklin 🦷💫. Nuestro equipo de profesionales está aquí para ayudarte a mantener una salud bucal óptima y una sonrisa radiante 😊. Ofrecemos:
+
+              - Limpieza dental
+              - Ortodoncia
+              - Implantes dentales
+              - Blanqueamiento dental ✨
+              - Y más
+
+          ¿Quieres agendar una cita?  
+          📞  942025308
+          📧 dentoklin.20@gmail.com
+          📍 Calle Colón #262, Huacho
+
+          ¡Estamos aquí para ayudarte! 😊</p>
+          <div class="options">
+            <button>Agendar cita en línea</button>
+            <button>Agendar cita por WhatsApp</button>
+          </div>
+          <span class="time">9:40 am</span>
+        </div>
+      </div>
+
+      <!-- Barra de mensaje -->
+      <div class="chat-input">
+        <input type="text" placeholder="Tu plan no permite enviar mensajes" disabled>
+        <button disabled><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal Nuevo Chat -->
+  <div id="modalNuevoChat" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>➕ Nuevo chat</h2>
+      <form id="formNuevoChat">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" required>
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" required>
+
+        <label for="numero">Número de contacto:</label>
+        <input type="text" id="numero" required>
+
+        <div class="modal-actions">
+          <button type="button" id="btnExistente">📂 Contacto existente</button>
+          <button type="submit" id="btnAgregar">➕ Agregar contacto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<!-- Script -->
+  <script>
+    const modal = document.getElementById("modalNuevoChat");
+    const btnNuevoChat = document.getElementById("nuevoChatBtn");
+    const spanClose = document.querySelector(".close");
+    const formNuevoChat = document.getElementById("formNuevoChat");
+    const chatItems = document.getElementById("chatItems");
+
+    // ============================
+  // Cargar chats desde localStorage
+  // ============================
+  let chats = JSON.parse(localStorage.getItem("chats")) || [];
+
+  function mostrarChats() {
+    chatItems.innerHTML = "";
+    chats.forEach(chat => {
+      const nuevoChat = document.createElement("div");
+      nuevoChat.classList.add("chat-item");
+      nuevoChat.innerHTML = `
+        <img src="https://via.placeholder.com/40" alt="perfil">
+        <div class="chat-info">
+          <p class="chat-name">${chat.nombre} ${chat.apellido}</p>
+          <p class="chat-msg">📱 ${chat.numero}</p>
+        </div>
+      `;
+      chatItems.appendChild(nuevoChat);
+    });
+  }
+
+  mostrarChats();
+
+    // ============================
+  // Abrir / Cerrar modal
+  // ============================
+  btnNuevoChat.onclick = () => modal.style.display = "flex";
+  spanClose.onclick = () => modal.style.display = "none";
+  window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; }
+
+    // ============================
+  // Agregar contacto nuevo
+  // ============================
+  formNuevoChat.onsubmit = (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById("nombre").value;
+    const apellido = document.getElementById("apellido").value;
+    const numero = document.getElementById("numero").value;
+
+    const nuevoContacto = { nombre, apellido, numero };
+
+    // Guardar en array y en localStorage
+    chats.unshift(nuevoContacto);
+    localStorage.setItem("chats", JSON.stringify(chats));
+
+    // Mostrar en pantalla
+    mostrarChats();
+
+    // Cerrar modal y limpiar
+    modal.style.display = "none";
+    formNuevoChat.reset();
+  };
+
+   // ============================
+  // Botón contacto existente
+  // ============================
+  document.getElementById("btnExistente").onclick = () => {
+    alert("Aquí luego podemos abrir un buscador de contactos existentes 🔎");
+  };
+  </script>
+
+
+</body>
+</html>

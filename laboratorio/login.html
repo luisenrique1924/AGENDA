@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Dentodesk</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <!-- ================= LOGIN PRINCIPAL ================= -->
+  <div class="login-container">
+    <h1>Dentodesk</h1>
+    <p class="subtitulo">Acceso de pacientes y administrador</p>
+
+    <!-- Tabs para cambiar entre Iniciar sesión y Registrar -->
+    <div class="tabs">
+      <button id="tabLogin" class="active">Iniciar sesión</button>
+      <button id="tabRegister">Registrar paciente</button>
+    </div>
+
+    <!-- FORMULARIO DE LOGIN -->
+    <form id="formLogin" class="form active">
+      <label>DNI</label>
+      <input type="text" id="loginDni" placeholder="Ingresa tu DNI">
+
+      <label>Contraseña</label>
+      <input type="password" id="loginPassword" placeholder="Contraseña">
+
+      <button type="submit" class="btn">Ingresar</button>
+    </form>
+
+    <!-- FORMULARIO DE REGISTRO -->
+    <form id="formRegister" class="form">
+      <label>DNI</label>
+      <input type="text" id="regDni" placeholder="DNI del paciente">
+
+      <label>Nombre completo</label>
+      <input type="text" id="regNombre" placeholder="Nombre completo">
+
+      <label>Contraseña</label>
+      <input type="password" id="regPassword" placeholder="Contraseña">
+
+      <button type="submit" class="btn">Registrar</button>
+    </form>
+  </div>
+
+  <script>
+    /* ================= TAB SWITCH ================= */
+    const tabLogin = document.getElementById("tabLogin");
+    const tabRegister = document.getElementById("tabRegister");
+    const formLogin = document.getElementById("formLogin");
+    const formRegister = document.getElementById("formRegister");
+
+    tabLogin.addEventListener("click", () => {
+      tabLogin.classList.add("active");
+      tabRegister.classList.remove("active");
+      formLogin.classList.add("active");
+      formRegister.classList.remove("active");
+    });
+
+    tabRegister.addEventListener("click", () => {
+      tabRegister.classList.add("active");
+      tabLogin.classList.remove("active");
+      formRegister.classList.add("active");
+      formLogin.classList.remove("active");
+    });
+
+    /* ================= REGISTRAR PACIENTE ================= */
+    formRegister.addEventListener("submit", e => {
+      e.preventDefault();
+      const dni = document.getElementById("regDni").value;
+      const nombre = document.getElementById("regNombre").value;
+      const password = document.getElementById("regPassword").value;
+
+      if (!dni || !nombre || !password) {
+        alert("Completa todos los campos");
+        return;
+      }
+
+      let usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
+      if (usuarios[dni]) {
+        alert("Ese DNI ya está registrado");
+        return;
+      }
+
+      usuarios[dni] = { nombre, password };
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+      alert("Paciente registrado correctamente ✅");
+
+      // Cambiar automáticamente al login
+      tabLogin.click();
+    });
+
+    /* ================= INICIAR SESIÓN ================= */
+    formLogin.addEventListener("submit", e => {
+      e.preventDefault();
+      const dni = document.getElementById("loginDni").value;
+      const password = document.getElementById("loginPassword").value;
+
+      let usuarios = JSON.parse(localStorage.getItem("usuarios")) || {};
+
+      if (usuarios[dni] && usuarios[dni].password === password) {
+        localStorage.setItem("usuarioActivo", dni);
+        window.location.href = "index.html"; // Ir a la agenda
+      } else {
+        alert("DNI o contraseña incorrectos ❌");
+      }
+    });
+  </script>
+</body>
+</html>

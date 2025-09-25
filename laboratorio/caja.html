@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Caja - Dentodesk</title>
+  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="caja.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="actions">
+      <button class="main-btn">Registrar cita</button>
+      <div class="user-menu">
+        <button class="user-btn">👤⌄</button>
+        <div class="dropdown hidden">
+          <a href="#">Mi perfil</a>
+          <a href="#">Cerrar sesión</a>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="buscarPaciente" placeholder="Buscar paciente">
+        <button id="btnBuscar">🔍</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tabs superiores -->
+  <section class="caja-tabs">
+    <button class="tab active" data-tab="movimientos">Ingresos y egresos</button>
+    <button class="tab" data-tab="comisiones">Comisiones</button>
+    <button class="tab" data-tab="links">Links de pago</button>
+  </section>
+
+  <!-- Resumen financiero -->
+  <section class="resumen-financiero" id="resumen">
+    <span class="ingreso">Ingreso: S/ 0.00</span>
+    <span class="usd-ingreso">US$: 0.00</span>
+    <span class="egreso">Egreso: S/ 0.00</span>
+    <span class="usd-egreso">US$: 0.00</span>
+  </section>
+
+  <main class="caja-container">
+
+    <!-- Encabezado -->
+    <section class="caja-header">
+      <h2>Gestión de Caja</h2>
+      <div class="btn-group">
+        <button class="main-btn ingreso" id="btnIngreso">+ Nuevo Ingreso</button>
+        <button class="main-btn gasto" id="btnGasto">+ Nuevo Gasto</button>
+        <button class="main-btn" id="exportExcel">📊 Exportar Excel</button>
+        <button class="main-btn" id="exportPDF">📑 Exportar PDF</button>
+      </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="caja-section filtros">
+      <h3>Filtros de Búsqueda</h3>
+      <label>Desde: <input type="date" id="filtroDesde"></label>
+      <label>Hasta: <input type="date" id="filtroHasta"></label>
+      <button class="main-btn" id="btnFiltrar">Filtrar</button>
+    </section>
+
+    <!-- Contenidos dinámicos -->
+    <section class="caja-section contenido active" id="movimientos">
+      <h3>Movimientos de Caja</h3>
+      <table id="tablaCaja">
+        <thead>
+          <tr>
+            <th data-col="hora">Hora</th>
+            <th data-col="doctor">Doctor</th>
+            <th data-col="paciente">Paciente</th>
+            <th data-col="concepto">Concepto</th>
+            <th data-col="medio">Medio de pago</th>
+            <th data-col="comentario">Comentario</th>
+            <th data-col="monto">Monto</th>
+            <th data-col="estado">Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tablaMovimientos">
+          <tr class="vacio">
+            <td colspan="9">
+              <div class="no-info">
+                <div class="icono">🔍</div>
+                <p>No se encontró ninguna información</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="caja-section contenido" id="comisiones">
+      <h3>Comisiones</h3>
+      <p>Aquí aparecerán las comisiones generadas.</p>
+    </section>
+
+    <section class="caja-section contenido" id="links">
+      <h3>Links de pago</h3>
+      <p>Aquí podrás generar y gestionar tus links de pago.</p>
+    </section>
+
+  </main>
+
+  <!-- Modal para ingreso/gasto -->
+  <div class="modal hidden" id="modalForm">
+    <div class="modal-content">
+      <h3 id="modalTitulo"></h3>
+      <label>Doctor: <input type="text" id="doctor"></label>
+      <label>Paciente: <input type="text" id="paciente"></label>
+      <label>Concepto: <input type="text" id="concepto"></label>
+      <label>Monto: <input type="number" id="monto"></label>
+      <label>Medio de pago:
+        <select id="medioPago">
+          <option>Efectivo</option>
+          <option>Tarjeta</option>
+          <option>Transferencia</option>
+        </select>
+      </label>
+      <label>Comentario: <input type="text" id="comentario"></label>
+      <button class="main-btn" id="guardarMovimiento">Guardar</button>
+      <button class="main-btn gasto" id="cerrarModal">Cancelar</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+  <script>
+    // ============ VARIABLES ============
+    const tabla = document.getElementById("tablaMovimientos");
+    const resumen = document.getElementById("resumen");
+    let movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
+    let ingresos = 0, egresos = 0;
+
+    // ============ MODAL ============
+    const modal = document.getElementById("modalForm");
+    const modalTitulo = document.getElementById("modalTitulo");
+    const cerrarModal = document.getElementById("cerrarModal");
+
+    document.getElementById("btnIngreso").addEventListener("click", () => {
+      modalTitulo.textContent = "Nuevo Ingreso";
+      modal.dataset.tipo = "ingreso";
+      modal.classList.remove("hidden");
+    });
+
+    document.getElementById("btnGasto").addEventListener("click", () => {
+      modalTitulo.textContent = "Nuevo Gasto";
+      modal.dataset.tipo = "gasto";
+      modal.classList.remove("hidden");
+    });
+
+    cerrarModal.addEventListener("click", () => modal.classList.add("hidden"));
+
+    // ============ GUARDAR MOVIMIENTO ============
+    document.getElementById("guardarMovimiento").addEventListener("click", () => {
+      const doctor = document.getElementById("doctor").value;
+      const paciente = document.getElementById("paciente").value;
+      const concepto = document.getElementById("concepto").value;
+      const monto = parseFloat(document.getElementById("monto").value);
+      const medio = document.getElementById("medioPago").value;
+      const comentario = document.getElementById("comentario").value;
+      const tipo = modal.dataset.tipo;
+
+      if (!doctor || !paciente || !concepto || isNaN(monto)) {
+        alert("Completa todos los campos.");
+        return;
+      }
+
+      const movimiento = {
+        hora: new Date().toLocaleTimeString(),
+        doctor, paciente, concepto, monto, medio, comentario, tipo
+      };
+
+      movimientos.push(movimiento);
+      localStorage.setItem("movimientos", JSON.stringify(movimientos));
+
+      renderMovimientos();
+      modal.classList.add("hidden");
+      document.querySelectorAll("#modalForm input").forEach(i => i.value = "");
+    });
+
+    // ============ RENDER TABLA ============
+    function renderMovimientos() {
+      tabla.innerHTML = "";
+      ingresos = 0; egresos = 0;
+
+      if (movimientos.length === 0) {
+        tabla.innerHTML = `
+          <tr class="vacio">
+            <td colspan="9">
+              <div class="no-info">
+                <div class="icono">🔍</div>
+                <p>No se encontró ninguna información</p>
+              </div>
+            </td>
+          </tr>`;
+        actualizarResumen();
+        return;
+      }
+
+      movimientos.forEach((m, i) => {
+        if (m.tipo === "ingreso") ingresos += m.monto;
+        else egresos += m.monto;
+
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${m.hora}</td>
+          <td>${m.doctor}</td>
+          <td>${m.paciente}</td>
+          <td>${m.concepto}</td>
+          <td>${m.medio}</td>
+          <td>${m.comentario}</td>
+          <td>${m.tipo === "ingreso" ? "+" : "-"} S/ ${m.monto.toFixed(2)}</td>
+          <td>${m.tipo === "ingreso" ? "✅" : "❌"}</td>
+          <td><button class="main-btn gasto btnEliminar" data-index="${i}">Eliminar</button></td>
+        `;
+        tabla.appendChild(fila);
+      });
+
+      actualizarResumen();
+    }
+
+    // ============ ELIMINAR ============
+    tabla.addEventListener("click", e => {
+      if (e.target.classList.contains("btnEliminar")) {
+        const index = e.target.dataset.index;
+        if (confirm("¿Eliminar este movimiento?")) {
+          movimientos.splice(index, 1);
+          localStorage.setItem("movimientos", JSON.stringify(movimientos));
+          renderMovimientos();
+        }
+      }
+    });
+
+    // ============ RESUMEN ============
+    function actualizarResumen() {
+      resumen.querySelector(".ingreso").textContent = "Ingreso: S/ " + ingresos.toFixed(2);
+      resumen.querySelector(".egreso").textContent = "Egreso: S/ -" + egresos.toFixed(2);
+    }
+
+    // ============ INICIALIZAR ============
+    renderMovimientos();
+
+    // ============ EXPORTAR ============
+    document.getElementById("exportExcel").addEventListener("click", () => {
+      const wb = XLSX.utils.table_to_book(document.getElementById("tablaCaja"), {sheet:"Caja"});
+      XLSX.writeFile(wb, "CajaDentodesk.xlsx");
+    });
+
+    document.getElementById("exportPDF").addEventListener("click", () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.text("Reporte de Caja - Dentodesk", 10, 10);
+      doc.autoTable({ html: "#tablaCaja" });
+      doc.save("CajaDentodesk.pdf");
+    });
+  </script>
+</body>
+</html>

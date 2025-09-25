@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dentodesk - Administrador General</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="general.css">
+</head>
+<body>
+  <!-- Barra lateral -->
+  <aside class="sidebar">
+    <div class="logo">🦷 Dentodesk</div>
+    <ul>
+      <li onclick="mostrarSeccion('dashboard')"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
+      <li onclick="mostrarSeccion('pacientes')"><i class="fa-solid fa-users"></i> Pacientes</li>
+      <li onclick="mostrarSeccion('agenda')"><i class="fa-solid fa-calendar"></i> Agenda</li>
+      <li onclick="mostrarSeccion('recibos')"><i class="fa-solid fa-file-invoice"></i> Recibos</li>
+      <li onclick="mostrarSeccion('servicios')"><i class="fa-solid fa-stethoscope"></i> Servicios</li>
+      <li onclick="mostrarSeccion('estadisticas')"><i class="fa-solid fa-chart-pie"></i> Estadísticas</li>
+    </ul>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="main">
+    <header>
+      <h1>👨‍⚕️ Panel de Administración</h1>
+    </header>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="seccion activa">
+      <h2>Resumen General</h2>
+      <div class="cards">
+        <div class="card"><h3 id="totalPacientes">0</h3><p>Pacientes</p></div>
+        <div class="card"><h3 id="totalCitas">0</h3><p>Citas</p></div>
+        <div class="card"><h3 id="totalRecibos">0</h3><p>Recibos</p></div>
+        <div class="card"><h3 id="ingresos">S/0</h3><p>Ingresos</p></div>
+      </div>
+    </section>
+
+    <!-- Pacientes -->
+    <section id="pacientes" class="seccion">
+      <h2>Gestión de Pacientes</h2>
+      <div class="card-form">
+        <form id="formPaciente">
+          <input type="text" id="dniPaciente" placeholder="DNI" required>
+          <input type="text" id="nombrePaciente" placeholder="Nombre Completo" required>
+          <input type="password" id="clavePaciente" placeholder="Contraseña" required>
+          <button type="submit"><i class="fa-solid fa-user-plus"></i> Agregar Paciente</button>
+        </form>
+      </div>
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>DNI</th>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="listaPacientes"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    // ===== Cambiar secciones =====
+    function mostrarSeccion(id) {
+      document.querySelectorAll('.seccion').forEach(sec => sec.classList.remove('activa'));
+      document.getElementById(id).classList.add('activa');
+    }
+
+    // ===== Gestión de pacientes =====
+    const formPaciente = document.getElementById('formPaciente');
+    const listaPacientes = document.getElementById('listaPacientes');
+
+    function cargarPacientes() {
+      // Código de carga de pacientes
+    }
+
+    formPaciente.addEventListener("submit", e => {
+      // Código de gestión de pacientes
+    });
+
+    function eliminarPaciente(index) {
+      // Código de eliminación de pacientes
+    }
+
+    cargarPacientes();
+  </script>
+</body>
+</html>

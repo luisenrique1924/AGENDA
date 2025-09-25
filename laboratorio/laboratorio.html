@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dentodesk - Laboratorio</title>
+  <link rel="stylesheet" href="laboratorio.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+  </header>
+
+  <form id="formLaboratorio">
+    <table id="tablaTratamientos">
+      <thead>
+        <tr>
+          <th>Cant.</th>
+          <th>Tratamiento</th>
+          <th>P.U.</th>
+          <th>Importe</th>
+          <th>Dscto</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="number" value="1" min="1" class="cant"></td>
+          <td><input type="text" placeholder="Tratamiento"></td>
+          <td><input type="number" value="0" min="0" class="pu"></td>
+          <td><input type="number" value="0" min="0" class="importe" readonly></td>
+          <td><input type="number" value="0" min="0" class="dscto"></td>
+          <td><button type="button" class="btnEliminar">❌</button></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="total-label">TOTAL</td>
+          <td class="total-value" id="total">0</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="acciones">
+      <button type="button" id="agregarFila">➕ Agregar Tratamiento</button>
+      <button type="submit">💾 Guardar</button>
+    </div>
+  </form>
+
+  <script>
+    // Función para recalcular importes y total
+    function recalcular() {
+      let total = 0;
+      document.querySelectorAll("#tablaTratamientos tbody tr").forEach(fila => {
+        let cant = parseFloat(fila.querySelector(".cant").value) || 0;
+        let pu = parseFloat(fila.querySelector(".pu").value) || 0;
+        let dscto = parseFloat(fila.querySelector(".dscto").value) || 0;
+        let importe = (cant * pu) - dscto;
+        fila.querySelector(".importe").value = importe.toFixed(2);
+        total += importe;
+      });
+      document.getElementById("total").textContent = total.toFixed(2);
+    }
+
+    // Función para guardar datos en localStorage
+    function guardarDatos() {
+      const tratamientos = [];
+      document.querySelectorAll("#tablaTratamientos tbody tr").forEach(fila => {
+        const cant = fila.querySelector(".cant").value;
+        const tratamiento = fila.querySelector("input[type='text']").value;
+        const pu = fila.querySelector(".pu").value;
+        const dscto = fila.querySelector(".dscto").value;
+        tratamientos.push({ cant, tratamiento, pu, dscto });
+      });
+      localStorage.setItem("tratamientos", JSON.stringify(tratamientos));
+    }
+
+    // Función para cargar datos desde localStorage
+    function cargarDatos() {
+      const tratamientos = JSON.parse(localStorage.getItem("tratamientos")) || [];
+      const tbody = document.querySelector("#tablaTratamientos tbody");
+      tratamientos.forEach(trat => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td><input type="number" value="${trat.cant}" min="1" class="cant"></td>
+          <td><input type="text" value="${trat.tratamiento}" placeholder="Tratamiento"></td>
+          <td><input type="number" value="${trat.pu}" min="0" class="pu"></td>
+          <td><input type="number" value="0" min="0" class="importe" readonly></td>
+          <td><input type="number" value="${trat.dscto}" min="0" class="dscto"></td>
+          <td><button type="button" class="btnEliminar">❌</button></td>
+        `;
+        tbody.appendChild(fila);
+      });
+      recalcular();
+    }
+
+    // Detectar cambios
+    document.addEventListener("input", e => {
+      if (e.target.classList.contains("cant") || e.target.classList.contains("pu") || e.target.classList.contains("dscto")) {
+        recalcular();
+      }
+    });
+
+    // Agregar fila
+    document.getElementById("agregarFila").addEventListener("click", () => {
+      const tbody = document.querySelector("#tablaTratamientos tbody");
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td><input type="number" value="1" min="1" class="cant"></td>
+        <td><input type="text" placeholder="Tratamiento"></td>
+        <td><input type="number" value="0" min="0" class="pu"></td>
+        <td><input type="number" value="0" min="0" class="importe" readonly></td>
+        <td><input type="number" value="0" min="0" class="dscto"></td>
+        <td><button type="button" class="btnEliminar">❌</button></td>
+      `;
+      tbody.appendChild(fila);
+    });
+
+    // Eliminar fila
+    document.addEventListener("click", e => {
+      if (e.target.classList.contains("btnEliminar")) {
+        e.target.closest("tr").remove();
+        recalcular();
+      }
+    });
+
+    // Guardar
+    document.getElementById("formLaboratorio").addEventListener("submit", e => {
+      e.preventDefault();
+      guardarDatos();
+      alert("Datos guardados correctamente.");
+    });
+
+    // Cargar datos al cargar la página
+    window.onload = cargarDatos;
+    recalcular();
+  </script>
+</body>
+</html>

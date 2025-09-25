@@ -1,0 +1,98 @@
+/* ========== ESTILOS LOGIN - CLÍNICA DENTAL CELESTE ========== */
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #e6f7fb, #ffffff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Caja principal */
+.login-container {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  width: 350px;
+  text-align: center;
+}
+
+h1 {
+  color: #33A9E0;
+  margin-bottom: 0.5rem;
+}
+
+.subtitulo {
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+}
+
+.tabs button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  background: #f0f8fb;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.tabs button.active {
+  background: #33A9E0;
+  color: white;
+  border-radius: 6px;
+}
+
+/* Formularios */
+.form {
+  display: none;
+  text-align: left;
+}
+
+.form.active {
+  display: block;
+}
+
+label {
+  display: block;
+  margin: 0.5rem 0 0.2rem;
+  color: #333;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+/* Botón principal */
+.btn {
+  background: #33A9E0;
+  color: white;
+  border: none;
+  padding: 0.7rem;
+  width: 100%;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background: #2893c5;
+}

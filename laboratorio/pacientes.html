@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pacientes - Dentodesk</title>
+  <link rel="stylesheet" href="pacientes.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Header / Navbar -->
+  <header class="navbar">
+    <div class="logo">🦷 Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="actions">
+      <button class="main-btn" onclick="abrirModalCita()"><i class="fa-solid fa-calendar-plus"></i> Registrar cita</button>
+      <div class="user-menu">
+        <button class="user-btn" onclick="toggleUserMenu()"><i class="fa-solid fa-user"></i> ⌄</button>
+        <div class="dropdown hidden" id="dropdown">
+          <a href="#">Mi perfil</a>
+          <a href="#">Cerrar sesión</a>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="buscarPaciente" placeholder="Buscar paciente">
+        <button onclick="buscarPaciente()"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="pacientes-container">
+
+    <!-- Encabezado de la sección -->
+    <div class="section-header">
+      <h1><i class="fa-solid fa-users"></i> Gestión de Pacientes</h1>
+      <button class="add-btn" onclick="abrirModalPaciente()"><i class="fa-solid fa-user-plus"></i> Nuevo paciente</button>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filtros-bar">
+      <div class="pacientes-info">
+        <label for="filtro-pacientes">Listado:</label>
+        <span class="contador" id="contador-pacientes">0 pacientes registrados</span>
+      </div>
+      <div class="pacientes-busqueda">
+        <input type="text" id="filtroNombre" placeholder="Nombre, apellido, DNI..." />
+        <button class="search-btn" onclick="buscarPacienteTabla()"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+
+    <!-- Tabla de pacientes -->
+    <div class="tabla-pacientes">
+      <table>
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Última cita</th>
+            <th>Próxima cita</th>
+            <th>Tarea</th>
+            <th>Presupuesto</th>
+            <th>Fuente de captación</th>
+            <th>Comentario</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-pacientes">
+          <!-- Se cargan dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="paginacion-bar">
+      <span class="total-resultados" id="total-resultados">0 resultados</span>
+      <div class="selector-pagina">
+        <label for="cantidad">Mostrar</label>
+        <select id="cantidad" onchange="cargarPacientes()">
+          <option>10</option>
+          <option>20</option>
+          <option>50</option>
+        </select>
+        <span>resultados por página</span>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal Registrar Cita -->
+  <div class="modal hidden" id="modalCita">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarModalCita()">&times;</span>
+      <h2>Registrar cita</h2>
+      <input type="text" id="pacienteCita" placeholder="Nombre del paciente">
+      <input type="date" id="fechaCita">
+      <input type="time" id="horaCita">
+      <textarea id="obsCita" placeholder="Observaciones"></textarea>
+      <div class="modal-actions">
+        <button onclick="guardarCita()">Guardar</button>
+        <button onclick="cerrarModalCita()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nuevo Paciente -->
+  <div class="modal hidden" id="modalPaciente">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarModalPaciente()">&times;</span>
+      <h2>Nuevo Paciente</h2>
+      <input type="text" id="nombrePaciente" placeholder="Nombre del paciente">
+      <textarea id="comentarioPaciente" placeholder="Comentario"></textarea>
+      <div class="modal-actions">
+        <button onclick="guardarPaciente()">Guardar</button>
+        <button onclick="cerrarModalPaciente()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==== Dropdown perfil ====
+    function toggleUserMenu() {
+      document.getElementById("dropdown").classList.toggle("hidden");
+    }
+
+    // ==== Modal cita ====
+    function abrirModalCita() {
+      document.getElementById("modalCita").classList.remove("hidden");
+    }
+    function cerrarModalCita() {
+      document.getElementById("modalCita").classList.add("hidden");
+    }
+
+    // ==== Modal paciente ====
+    function abrirModalPaciente() {
+      document.getElementById("modalPaciente").classList.remove("hidden");
+    }
+    function cerrarModalPaciente() {
+      document.getElementById("modalPaciente").classList.add("hidden");
+    }
+
+    // ==== Guardar cita ====
+    function guardarCita() {
+      let paciente = document.getElementById("pacienteCita").value;
+      let fecha = document.getElementById("fechaCita").value;
+      let hora = document.getElementById("horaCita").value;
+      let obs = document.getElementById("obsCita").value;
+
+      if (!paciente || !fecha || !hora) {
+        alert("Completa todos los campos obligatorios");
+        return;
+      }
+
+      let citas = JSON.parse(localStorage.getItem("citas")) || [];
+      citas.push({ paciente, fecha, hora, observaciones: obs });
+      localStorage.setItem("citas", JSON.stringify(citas));
+
+      cerrarModalCita();
+      cargarPacientes();
+    }
+
+    // ==== Guardar paciente ====
+    function guardarPaciente() {
+      let nombre = document.getElementById("nombrePaciente").value;
+      let comentario = document.getElementById("comentarioPaciente").value;
+
+      if (!nombre) {
+        alert("El nombre es obligatorio");
+        return;
+      }
+
+      let citas = JSON.parse(localStorage.getItem("citas")) || [];
+      citas.push({ paciente: nombre, fecha: "-", hora: "-", observaciones: comentario });
+      localStorage.setItem("citas", JSON.stringify(citas));
+
+      cerrarModalPaciente();
+      cargarPacientes();
+    }
+
+    // ==== Cargar pacientes en tabla ====
+    function cargarPacientes() {
+      let citas = JSON.parse(localStorage.getItem("citas")) || [];
+      let tbody = document.getElementById("tabla-pacientes");
+      let contador = document.getElementById("contador-pacientes");
+      let total = document.getElementById("total-resultados");
+
+      tbody.innerHTML = "";
+
+      let hoy = new Date();
+      citas.forEach((cita, index) => {
+        let aviso = "";
+        if (cita.fecha && cita.fecha !== "-") {
+          let fechaCita = new Date(cita.fecha + "T" + (cita.hora || "00:00"));
+          let diffHoras = (fechaCita - hoy) / (1000 * 60 * 60);
+          let diffDias = Math.floor(diffHoras / 24);
+
+          if (diffHoras >= 0 && diffHoras <= 24) {
+            aviso = `<span class="aviso-urgente">⚠ Falta poco</span>`;
+          } else if (diffDias === 1) {
+            aviso = `<span class="aviso-urgente">⚠ Mañana</span>`;
+          }
+        }
+
+        let fila = `
+          <tr>
+            <td>
+              <div class="nombre">
+                <a href="odontograma.html?paciente=${encodeURIComponent(cita.paciente)}" class="link-paciente">
+                  <strong>${cita.paciente}</strong>
+                </a><br>
+                <span class="id">CITA-${index + 1}</span>
+              </div>
+            </td>
+            <td>-</td>
+            <td>${cita.fecha} ${cita.hora} ${aviso}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>Agenda</td>
+            <td>${cita.observaciones || "-"}</td>
+            <td class="acciones">
+              <button class="edit" onclick="editarCita(${index})"><i class="fa-solid fa-pen"></i></button>
+              <button class="delete" onclick="eliminarCita(${index})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>`;
+        tbody.insertAdjacentHTML("beforeend", fila);
+      });
+
+      contador.textContent = `${citas.length} pacientes registrados`;
+      total.textContent = `${citas.length} resultados`;
+    }
+
+    // ==== Eliminar cita ====
+    function eliminarCita(index) {
+      let citas = JSON.parse(localStorage.getItem("citas")) || [];
+      citas.splice(index, 1);
+      localStorage.setItem("citas", JSON.stringify(citas));
+      cargarPacientes();
+    }
+
+    // ==== Editar cita ====
+    function editarCita(index) {
+      let citas = JSON.parse(localStorage.getItem("citas")) || [];
+      let cita = citas[index];
+
+      document.getElementById("pacienteCita").value = cita.paciente;
+      document.getElementById("fechaCita").value = cita.fecha;
+      document.getElementById("horaCita").value = cita.hora;
+      document.getElementById("obsCita").value = cita.observaciones;
+
+      abrirModalCita();
+      eliminarCita(index);
+    }
+
+    // ==== Buscar ====
+    function buscarPacienteTabla() {
+      let filtro = document.getElementById("filtroNombre").value.toLowerCase();
+      let filas = document.querySelectorAll("#tabla-pacientes tr");
+
+      filas.forEach(fila => {
+        let nombre = fila.querySelector("td").innerText.toLowerCase();
+        fila.style.display = nombre.includes(filtro) ? "" : "none";
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", cargarPacientes);
+
+    // ==== Cerrar modal al hacer clic afuera ====
+    window.onclick = function(event) {
+      if (event.target.classList.contains("modal")) {
+        event.target.classList.add("hidden");
+      }
+    }
+  </script>
+</body>
+</html>

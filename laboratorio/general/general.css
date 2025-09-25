@@ -1,0 +1,164 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  display: flex;
+  background: #f9fbfd;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #0077b6, #00b4d8);
+  color: white;
+  height: 100vh;
+  padding: 2px;
+  position: fixed;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+}
+.logo {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+.sidebar ul li {
+  padding: 12px;
+  margin: 8px 0;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+.sidebar ul li:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateX(5px);
+}
+
+/* Main */
+.main {
+  margin-left: 240px;
+  flex: 1;
+  padding: 20px;
+}
+header {
+  background: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+header h1 {
+  margin: 0;
+  color: #0077b6;
+}
+
+/* Secciones */
+.seccion {
+  display: none;
+}
+.seccion.activa {
+  display: block;
+}
+
+/* Tarjetas Dashboard */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+.card {
+  background: linear-gradient(135deg, #caf0f8, #90e0ef);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+.card h3 {
+  margin: 0;
+  font-size: 26px;
+  color: #023e8a;
+}
+.card p {
+  margin: 5px 0 0;
+  color: #0077b6;
+  font-weight: bold;
+}
+
+/* Formulario */
+.card-form {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+form input {
+  padding: 12px;
+  margin: 10px 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+form button {
+  background: #0077b6;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+}
+form button:hover {
+  background: #0096c7;
+}
+
+/* Tabla Pacientes */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.tabla th, .tabla td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+.tabla th {
+  background: #0077b6;
+  color: white;
+  font-weight: normal;
+}
+.tabla tr:hover {
+  background: #f1faff;
+}
+
+/* Botones */
+.btn {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn.eliminar {
+  background: #e63946;
+  color: white;
+}
+.btn.eliminar:hover {
+  background: #d62839;
+}

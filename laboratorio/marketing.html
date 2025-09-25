@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dentodesk - Marketing</title>
+  <link rel="stylesheet" href="marketing.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- ================= HEADER ================= -->
+  <header class="navbar">
+    <div class="logo">Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="actions">
+      <button class="main-btn" id="btnNuevaCampaña">
+        <i class="fa-solid fa-bullhorn"></i> Nueva campaña
+      </button>
+      <div class="search-bar">
+        <input type="text" id="buscarCampaña" placeholder="Buscar campaña...">
+        <button><i class="fa-solid fa-search"></i></button>
+      </div>
+      <div class="user-menu">
+        <button class="user-btn">👤 ⌄</button>
+        <div class="dropdown hidden">
+          <a href="#">Mi perfil</a>
+          <a href="#">Cerrar sesión</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= CONTENIDO ================= -->
+  <main class="marketing-container">
+    <h1>📊 Panel de Marketing</h1>
+
+    <!-- Tarjetas de métricas -->
+    <section class="stats-cards">
+      <div class="card azul">
+        <i class="fa-solid fa-user-plus"></i>
+        <h3>Pacientes nuevos</h3>
+        <p id="metricPacientes">128</p>
+      </div>
+      <div class="card verde">
+        <i class="fa-solid fa-calendar-check"></i>
+        <h3>Citas confirmadas</h3>
+        <p id="metricCitas">342</p>
+      </div>
+      <div class="card naranja">
+        <i class="fa-solid fa-bullhorn"></i>
+        <h3>Campañas activas</h3>
+        <p id="metricCampañas">5</p>
+      </div>
+      <div class="card morado">
+        <i class="fa-solid fa-dollar-sign"></i>
+        <h3>Ingresos</h3>
+        <p id="metricIngresos">$12,500</p>
+      </div>
+    </section>
+
+    <!-- Gráficos -->
+    <section class="charts">
+      <div class="chart-card">
+        <h2>📈 Evolución de pacientes</h2>
+        <canvas id="lineChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h2>📊 Resultados por campaña</h2>
+        <canvas id="barChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Tabla de campañas -->
+    <section class="tabla-campañas">
+      <h2>📢 Campañas activas</h2>
+      <table id="tablaCampañas">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Estado</th>
+            <th>Resultados</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Aquí se insertarán campañas dinámicas -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- ================= MODAL ================= -->
+  <div id="modalCampaña" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" id="cerrarModal">&times;</span>
+      <h2 id="modalTitulo">Crear nueva campaña</h2>
+      <form id="formCampaña">
+        <input type="hidden" id="editIndex">
+        <label>Nombre:
+          <input type="text" id="nombreCampaña" required>
+        </label>
+        <label>Fecha inicio:
+          <input type="date" id="fechaInicio" required>
+        </label>
+        <label>Fecha fin:
+          <input type="date" id="fechaFin" required>
+        </label>
+        <label>Descripción:
+          <textarea id="descripcion"></textarea>
+        </label>
+        <button type="submit" class="main-btn">Guardar campaña</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    // Modal
+    const modal = document.getElementById("modalCampaña");
+    const btnNueva = document.getElementById("btnNuevaCampaña");
+    const cerrar = document.getElementById("cerrarModal");
+    const form = document.getElementById("formCampaña");
+    const tabla = document.getElementById("tablaCampañas").querySelector("tbody");
+    const modalTitulo = document.getElementById("modalTitulo");
+    const editIndex = document.getElementById("editIndex");
+
+    // Abrir modal
+    btnNueva.addEventListener("click", () => {
+      form.reset();
+      editIndex.value = "";
+      modalTitulo.textContent = "Crear nueva campaña";
+      modal.classList.remove("hidden");
+    });
+
+    // Cerrar modal
+    cerrar.addEventListener("click", () => modal.classList.add("hidden"));
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) modal.classList.add("hidden");
+    });
+
+    // Datos iniciales
+    let campañas = [
+      { nombre: "Blanqueamiento Dental", inicio: "2025-09-01", fin: "2025-09-30", estado: "Activa", resultados: "85 pacientes" },
+      { nombre: "Chequeo Escolar", inicio: "2025-08-15", fin: "2025-09-15", estado: "Finalizada", resultados: "120 pacientes" },
+      { nombre: "Ortodoncia Premium", inicio: "2025-09-05", fin: "2025-10-05", estado: "Activa", resultados: "60 pacientes" }
+    ];
+
+    // Render tabla
+    function renderTabla() {
+      tabla.innerHTML = "";
+      campañas.forEach((c, i) => {
+        const fila = `
+          <tr>
+            <td>${c.nombre}</td>
+            <td>${c.inicio}</td>
+            <td>${c.fin}</td>
+            <td><span class="estado ${c.estado.toLowerCase()}">${c.estado}</span></td>
+            <td>${c.resultados}</td>
+            <td>
+              <button class="btn-editar" onclick="editarCampaña(${i})"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn-eliminar" onclick="eliminarCampaña(${i})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+        tabla.insertAdjacentHTML("beforeend", fila);
+      });
+    }
+
+    // Guardar campaña
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nueva = {
+        nombre: document.getElementById("nombreCampaña").value,
+        inicio: document.getElementById("fechaInicio").value,
+        fin: document.getElementById("fechaFin").value,
+        estado: "Activa",
+        resultados: "0 pacientes"
+      };
+      if (editIndex.value !== "") {
+        campañas[editIndex.value] = nueva;
+      } else {
+        campañas.push(nueva);
+      }
+      renderTabla();
+      modal.classList.add("hidden");
+    });
+
+    // Editar campaña
+    window.editarCampaña = (i) => {
+      const c = campañas[i];
+      document.getElementById("nombreCampaña").value = c.nombre;
+      document.getElementById("fechaInicio").value = c.inicio;
+      document.getElementById("fechaFin").value = c.fin;
+      document.getElementById("descripcion").value = c.descripcion || "";
+      editIndex.value = i;
+      modalTitulo.textContent = "Editar campaña";
+      modal.classList.remove("hidden");
+    };
+
+    // Eliminar campaña
+    window.eliminarCampaña = (i) => {
+      if (confirm("¿Eliminar esta campaña?")) {
+        campañas.splice(i, 1);
+        renderTabla();
+      }
+    };
+
+    // Inicializar
+    renderTabla();
+
+    // Gráficos con Chart.js
+    const ctxLine = document.getElementById("lineChart");
+    new Chart(ctxLine, {
+      type: "line",
+      data: {
+        labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"],
+        datasets: [{
+          label: "Pacientes nuevos",
+          data: [30, 50, 40, 70, 90, 100, 128],
+          borderColor: "#0077b6",
+          backgroundColor: "rgba(0, 119, 182, 0.2)",
+          fill: true,
+          tension: 0.3
+        }]
+      }
+    });
+
+    const ctxBar = document.getElementById("barChart");
+    new Chart(ctxBar, {
+      type: "bar",
+      data: {
+        labels: ["Blanqueamiento", "Chequeo", "Ortodoncia"],
+        datasets: [{
+          label: "Pacientes alcanzados",
+          data: [85, 120, 60],
+          backgroundColor: ["#0096c7", "#38b000", "#f77f00"]
+        }]
+      }
+    });
+  </script>
+</body>
+</html>

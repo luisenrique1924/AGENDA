@@ -1,0 +1,331 @@
+/* ====== NAVBAR ====== */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #0077b6;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.navbar .logo {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.navbar .nav-links a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar .nav-links a.active {
+  border-bottom: 2px solid #fff;
+}
+
+.navbar .actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.main-btn {
+  background: #00b4d8;
+  border: none;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-btn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+.user-menu .dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-menu .dropdown a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.search-bar input {
+  border: none;
+  padding: 6px;
+  outline: none;
+}
+
+.search-bar button {
+  border: none;
+  background: #00b4d8;
+  color: #fff;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* ====== CONTENIDO ====== */
+.pacientes-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h1 {
+  color: #0077b6;
+  font-size: 1.5rem;
+}
+
+.add-btn {
+  background: #0077b6;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Filtros */
+.filtros-bar {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  align-items: center;
+}
+
+.filtros-bar .pacientes-busqueda {
+  display: flex;
+}
+
+.filtros-bar input {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+}
+
+.filtros-bar .search-btn {
+  background: #00b4d8;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Tabla */
+.tabla-pacientes table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabla-pacientes th {
+  background: #0077b6;
+  color: #fff;
+  text-align: left;
+  padding: 10px;
+}
+
+.tabla-pacientes td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: middle;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.nombre {
+  display: inline-block;
+}
+
+.nombre .id {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.etiqueta {
+  background: red;
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 5px;
+}
+
+.acciones button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0 4px;
+}
+
+.acciones .edit {
+  color: #0077b6;
+}
+
+.acciones .delete {
+  color: red;
+}
+
+/* Aviso de cita cercana */
+.aviso-urgente {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #d90429;
+  background: #ffe5e9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  animation: parpadeo 1s infinite;
+}
+
+@keyframes parpadeo {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Paginación */
+.paginacion-bar {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selector-pagina select {
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* ====== MODAL ====== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.modal-content h2 {
+  margin-bottom: 15px;
+  text-align: center;
+  color: #0077b6;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.modal-actions button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.modal-actions button:first-child {
+  background: #0077b6;
+}
+
+.modal-actions button:last-child {
+  background: #999;
+}
+
+/* Botón cerrar modal */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red;
+}

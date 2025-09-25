@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Odontograma</title>
+  <link rel="stylesheet" href="odontograma.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Odontograma Dental</h1>
+      <a href="pacientes.html" class="btn-volver">← Volver a pacientes</a>
+    </header>
+
+    <button class="btn-borrar" id="btnBorrar">🗑 Borrar Odontograma</button>
+
+    <div class="contenedor-principal">
+      <div class="paleta-colores">
+        <h2>Leyenda de Colores</h2>
+        <div class="grupo-colores">
+          <h3>Procedimientos Indicados</h3>
+          <div class="opcion-color activo" data-color="#4CAF50">
+            <div class="color-box" style="background-color: #4CAF50"></div>
+            <span>Resina</span>
+          </div>
+          <div class="opcion-color" data-color="#FF9800">
+            <div class="color-box" style="background-color: #FF9800"></div>
+            <span>Amalgama</span>
+          </div>
+          <div class="opcion-color" data-color="#F44336">
+            <div class="color-box" style="background-color: #F44336"></div>
+            <span>Exodoncia simple indicada</span>
+          </div>
+          <div class="opcion-color" data-color="#9C27B0">
+            <div class="color-box" style="background-color: #9C27B0"></div>
+            <span>Exodoncia quirúrgica indicada</span>
+          </div>
+          <div class="opcion-color" data-color="#2196F3">
+            <div class="color-box" style="background-color: #2196F3"></div>
+            <span>Endodoncia indicada</span>
+          </div>
+          <div class="opcion-color" data-color="#00BCD4">
+            <div class="color-box" style="background-color: #00BCD4"></div>
+            <span>Sellante indicado</span>
+          </div>
+          <div class="opcion-color" data-color="#795548">
+            <div class="color-box" style="background-color: #795548"></div>
+            <span>Procedimiento realizado</span>
+          </div>
+          <div class="opcion-color" data-color="#607D8B">
+            <div class="color-box" style="background-color: #607D8B"></div>
+            <span>Obturación desadaptada</span>
+          </div>
+        </div>
+
+
+
+        <div class="grupo-colores">
+          <h3>Condiciones Dentales</h3>
+          <div class="opcion-color" data-color="#8BC34A">
+            <div class="color-box" style="background-color: #8BC34A"></div>
+            <span>Caries cavitacional</span>
+          </div>
+          <div class="opcion-color" data-color="#CDDC39">
+            <div class="color-box" style="background-color: #CDDC39"></div>
+            <span>Caries no cavitacional</span>
+          </div>
+          <div class="opcion-color" data-color="#FFEB3B">
+            <div class="color-box" style="background-color: #FFEB3B"></div>
+            <span>Exodoncia realizada</span>
+          </div>
+          <div class="opcion-color" data-color="#9E9E9E">
+            <div class="color-box" style="background-color: #9E9E9E"></div>
+            <span>Sin erupcionar</span>
+          </div>
+          <div class="opcion-color" data-color="#3F51B5">
+            <div class="color-box" style="background-color: #3F51B5"></div>
+            <span>Endodoncia realizada</span>
+          </div>
+          <div class="opcion-color" data-color="#009688">
+            <div class="color-box" style="background-color: #009688"></div>
+            <span>Sellante presente</span>
+          </div>
+          <div class="opcion-color" data-color="#FF5722">
+            <div class="color-box" style="background-color: #FF5722"></div>
+            <span>Erosión o abrasión</span>
+          </div>
+          <div class="opcion-color" data-color="#FFFFFF" style="border: 1px solid #ccc;">
+            <div class="color-box" style="background-color: #FFFFFF; border: 1px solid #ccc"></div>
+            <span>Corona buen estado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="odontograma-container">
+        <h2 id="titulo">Odontograma</h2>
+        ---------------------------------------------------------------------------BUCAL---------------------------------------------------------------------    
+          <div class="odontograma-superior">
+            <div class="cuadrante">
+              <div class="titulo-cuadrante">I - S Izq</div>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ|
+
+
+              <div id="cuadrante1" class="fila"></div>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ|
+
+            </div>
+
+            <div class="cuadrante">
+              <div class="titulo-cuadrante">II - S Der</div>
+              <div id="cuadrante2" class="fila"></div>
+            </div>
+
+          </div>
+
+
+
+        ---------------------------------------------------------------------------LINGUAL---------------------------------------------------------------------
+
+          <div class="odontograma-inferior">
+            <div class="cuadrante">
+              <div class="titulo-cuadrante">IV - I Izq</div>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ  ㅤㅤㅤㅤ|
+              <div id="cuadrante4" class="fila"></div>ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ    ㅤ|
+            </div>
+            <div class="cuadrante">
+              <div class="titulo-cuadrante">III - I Der</div>
+              <div id="cuadrante3" class="fila"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==============================
+    // Obtener paciente desde la URL
+    // ==============================
+    const params = new URLSearchParams(window.location.search);
+    const paciente = params.get("paciente") || "Paciente sin nombre";
+    document.getElementById("titulo").textContent = "Odontograma de " + paciente;
+
+    // Clave de LocalStorage
+    const key = "odontograma_" + paciente;
+    let datos = JSON.parse(localStorage.getItem(key)) || {};
+
+    // Color activo (por defecto verde)
+    let colorActivo = "#4CAF50";
+
+    // ==============================
+    // Selección de color
+    // ==============================
+    document.querySelectorAll(".opcion-color").forEach(opcion => {
+      opcion.addEventListener("click", () => {
+        document.querySelectorAll(".opcion-color").forEach(o => o.classList.remove("activo"));
+        opcion.classList.add("activo");
+        colorActivo = opcion.dataset.color;
+      });
+    });
+
+    // ==============================
+    // Función para crear un diente SVG
+    // ==============================
+    function crearDiente(numero) {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("diente-wrapper");
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 50 50");
+      svg.setAttribute("width", "50");
+      svg.setAttribute("height", "50");
+      svg.dataset.diente = numero;
+
+      const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      circle.setAttribute("cx", 25);
+      circle.setAttribute("cy", 25);
+      circle.setAttribute("r", 20);
+      circle.setAttribute("fill", "none");
+      circle.setAttribute("stroke", "black");
+      circle.setAttribute("stroke-width", "2");
+      svg.appendChild(circle);
+
+      const slices = [
+        "M25,25 L25,5 A20,20 0 0,1 45,25 Z",
+        "M25,25 L45,25 A20,20 0 0,1 25,45 Z",
+        "M25,25 L25,45 A20,20 0 0,1 5,25 Z",
+        "M25,25 L5,25 A20,20 0 0,1 25,5 Z",
+        "M25,25 m-10,0 a10,10 0 1,0 20,0 a10,10 0 1,0 -20,0"
+      ];
+
+      slices.forEach((pathData, index) => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathData);
+        path.setAttribute("fill", "white");
+        path.setAttribute("stroke", "black");
+
+        if (datos[numero] && datos[numero][index]) {
+          path.setAttribute("fill", datos[numero][index]);
+        }
+
+        path.addEventListener("click", () => {
+          path.setAttribute("fill", colorActivo);
+          if (!datos[numero]) datos[numero] = {};
+          datos[numero][index] = colorActivo;
+          localStorage.setItem(key, JSON.stringify(datos));
+        });
+
+        svg.appendChild(path);
+      });
+
+      const label = document.createElement("span");
+      label.classList.add("numero-diente");
+      label.textContent = numero;
+
+      wrapper.appendChild(svg);
+      wrapper.appendChild(label);
+
+      return wrapper;
+    }
+
+    // ==============================
+    // Generar cuadrantes
+    // ==============================
+    // Cuadrante I (superior derecho) → ROTADO
+      for (let i = 18; i >= 11; i--) {
+      const diente = crearDiente(i);
+      diente.querySelector("svg").setAttribute("transform", "rotate(137)"); 
+      document.getElementById("cuadrante1").appendChild(diente);
+    }
+
+      // Cuadrante II (superior izquierdo) → ROTADO
+      for (let i = 21; i <= 28; i++) {
+      const diente = crearDiente(i);
+      diente.querySelector("svg").setAttribute("transform", "rotate(137)");
+      document.getElementById("cuadrante2").appendChild(diente);
+    }
+
+      // Cuadrante IV (inferior derecho) → NORMAL
+      for (let i = 48; i >= 41; i--) {
+      const diente = crearDiente(i);
+      diente.querySelector("svg").setAttribute("transform", "rotate(137)");
+      document.getElementById("cuadrante4").appendChild(diente);
+    }
+
+      // Cuadrante III (inferior izquierdo) → NORMAL
+      for (let i = 31; i <= 38; i++) {
+      const diente = crearDiente(i);
+      diente.querySelector("svg").setAttribute("transform", "rotate(137)");
+      document.getElementById("cuadrante3").appendChild(diente);
+    }
+    document.getElementById("btnBorrar").addEventListener("click", () => {
+      if (confirm("¿Seguro que deseas borrar todo el odontograma de " + paciente + "?")) {
+        localStorage.removeItem(key);
+        datos = {};
+        document.querySelectorAll("svg path").forEach(path => path.setAttribute("fill", "white"));
+        alert("Odontograma borrado correctamente");
+      }
+    });
+  </script>
+
+</body>
+</html>

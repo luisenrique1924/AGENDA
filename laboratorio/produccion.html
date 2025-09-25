@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dentodesk - Producción</title>
+  <link rel="stylesheet" href="produccion.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Barra superior -->
+  <header class="navbar">
+    <div class="logo">Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+    <div class="actions">
+      <button class="main-btn">Registrar cita</button>
+      <div class="user-menu">
+        <button class="user-btn">👤⌄</button>
+        <div class="dropdown hidden">
+          <a href="#">Mi perfil</a>
+          <a href="#">Cerrar sesión</a>
+        </div>
+      </div>
+      <div class="search-bar">
+        <input type="text" id="buscarPaciente" placeholder="Buscar paciente">
+        <button id="btnBuscar">🔍</button>
+      </div>
+    </div>
+  </header>
+<!-- Panel principal -->
+  <main class="container">
+    <h2><i class="fa-solid fa-industry"></i> Panel de Producción</h2>
+
+    <!-- Tarjetas -->
+    <div class="cards">
+      <div class="card blue">
+        <i class="fa-solid fa-gears"></i>
+        <p>Órdenes en proceso</p>
+        <h3>76</h3>
+      </div>
+      <div class="card green">
+        <i class="fa-solid fa-check-circle"></i>
+        <p>Órdenes finalizadas</p>
+        <h3>215</h3>
+      </div>
+      <div class="card orange">
+        <i class="fa-solid fa-clock"></i>
+        <p>Órdenes retrasadas</p>
+        <h3>12</h3>
+      </div>
+      <div class="card purple">
+        <i class="fa-solid fa-dollar-sign"></i>
+        <p>Producción total</p>
+        <h3>$18,900</h3>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="charts">
+      <div class="chart-box">
+        <h3><i class="fa-solid fa-chart-line"></i> Producción mensual</h3>
+        <canvas id="chartProduccion"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3><i class="fa-solid fa-chart-pie"></i> Estado de órdenes</h3>
+        <canvas id="chartEstado"></canvas>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts de gráficos -->
+  <script>
+    // Gráfico de línea
+    const ctx1 = document.getElementById('chartProduccion').getContext('2d');
+    new Chart(ctx1, {
+      type: 'line',
+      data: {
+        labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+        datasets: [{
+          label: 'Producción',
+          data: [2000, 3500, 4000, 5000, 6500, 7200],
+          borderColor: '#00bcd4',
+          backgroundColor: 'rgba(0,188,212,0.15)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    // Gráfico de pastel
+    const ctx2 = document.getElementById('chartEstado').getContext('2d');
+    new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: ['En proceso', 'Finalizadas', 'Retrasadas'],
+        datasets: [{
+          data: [76, 215, 12],
+          backgroundColor: ['#03a9f4', '#4caf50', '#ff9800']
+        }]
+      },
+      options: { responsive: true }
+    });
+  </script>
+</body>
+</html>

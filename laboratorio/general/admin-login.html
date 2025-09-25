@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso Administrador - Dentodesk</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>🔑 Acceso Administrador</h1>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="clave1">Contraseña 1:</label>
+        <input type="password" id="clave1" required>
+      </div>
+      <div class="form-group">
+        <label for="clave2">Contraseña 2:</label>
+        <input type="password" id="clave2" required>
+      </div>
+      <button type="submit">Ingresar</button>
+      <p id="error" class="error"></p>
+    </form>
+  </div>
+
+  <script>
+    // Validación de doble contraseña
+    document.getElementById("loginForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const clave1 = document.getElementById("clave1").value;
+      const clave2 = document.getElementById("clave2").value;
+
+      if(clave1 === "clinicadental" && clave2 === "2A324333"){
+        // Redirige al panel administrador
+        window.location.href = "general.html";
+      } else {
+        document.getElementById("error").textContent = "❌ Claves incorrectas. Intente nuevamente.";
+      }
+    });
+  </script>
+</body>
+</html>

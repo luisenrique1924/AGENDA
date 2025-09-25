@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dentodesk - Inventario</title>
+  <link rel="stylesheet" href="inventario.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">Dentodesk</div>
+    <nav class="nav-links">
+      <a href="index.html">Agenda</a>
+      <a href="pacientes.html">Pacientes</a>
+      <a href="caja.html">Caja</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="produccion.html">Producción</a>
+      <a href="inventario.html">Inventario</a>
+      <a href="laboratorio.html" class="active">Laboratorio</a>
+      <a href="chat.html">Chat</a>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="content">
+    <h2>📦 Inventario</h2>
+    <p class="descripcion">Control profesional de insumos, materiales y medicamentos de la clínica dental.</p>
+
+    <!-- FORMULARIO PARA AGREGAR INSUMOS -->
+    <div class="card">
+      <h3>➕ Agregar insumo</h3>
+      <form id="formInsumo">
+        <input type="text" id="nombreInsumo" placeholder="Nombre del insumo" required>
+        <input type="number" id="cantidadInsumo" placeholder="Cantidad" min="1" required>
+        <input type="text" id="categoriaInsumo" placeholder="Categoría (ej: Medicamentos, Material)">
+        <button type="submit" class="btn-agregar">Agregar</button>
+      </form>
+    </div>
+
+    <!-- BARRA DE BUSQUEDA -->
+    <div class="card search-card">
+      <input type="text" id="buscarInsumo" placeholder="🔍 Buscar insumo...">
+    </div>
+
+    <!-- TABLA DE INVENTARIO -->
+    <div class="card">
+      <h3>📋 Stock actual</h3>
+      <table id="tablaInventario">
+        <thead>
+          <tr>
+            <th>Insumo</th>
+            <th>Cantidad</th>
+            <th>Categoría</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Se llenará dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById("formInsumo");
+    const tablaBody = document.querySelector("#tablaInventario tbody");
+    const buscar = document.getElementById("buscarInsumo");
+
+    let inventario = JSON.parse(localStorage.getItem("inventario")) || [];
+
+    // Renderizar inventario
+    function renderInventario(filtro = "") {
+      tablaBody.innerHTML = "";
+      inventario
+        .filter(item => item.nombre.toLowerCase().includes(filtro.toLowerCase()))
+        .forEach((item, index) => {
+          let estado = "";
+          if (item.cantidad > 20) estado = "<span class='estado ok'>🟢 Suficiente</span>";
+          else if (item.cantidad > 5) estado = "<span class='estado medio'>🟠 Bajo</span>";
+          else estado = "<span class='estado critico'>🔴 Crítico</span>";
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${item.nombre}</td>
+            <td>${item.cantidad}</td>
+            <td>${item.categoria || "-"}</td>
+            <td>${estado}</td>
+            <td>
+              <button class="delete-btn" onclick="eliminarInsumo(${index})">❌ Eliminar</button>
+            </td>
+          `;
+          tablaBody.appendChild(row);
+        });
+      localStorage.setItem("inventario", JSON.stringify(inventario));
+    }
+
+    // Agregar insumo
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById("nombreInsumo").value;
+      const cantidad = parseInt(document.getElementById("cantidadInsumo").value);
+      const categoria = document.getElementById("categoriaInsumo").value;
+
+      inventario.push({ nombre, cantidad, categoria });
+      renderInventario();
+      form.reset();
+    });
+
+    // Eliminar insumo
+    function eliminarInsumo(index) {
+      inventario.splice(index, 1);
+      renderInventario();
+    }
+
+    // Buscar insumo
+    buscar.addEventListener("input", (e) => {
+      renderInventario(e.target.value);
+    });
+
+    renderInventario();
+  </script>
+</body>
+</html>
